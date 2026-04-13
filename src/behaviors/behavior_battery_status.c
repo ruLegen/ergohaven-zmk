@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-#define DT_DRV_COMPAT zmk_battery_status
+#define DT_DRV_COMPAT zmk_behavior_battery_status
 
 #include <zephyr/device.h>
 #include <drivers/behavior.h>
