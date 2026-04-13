@@ -74,7 +74,7 @@ int split_reverse_digits(uint32_t num, int *digits, int max_digits)
     int count = 0;
     while (num > 0 && index >= 0)
     {
-        digits[count] = num % 10; // Get last digit
+        digits[index] = num % 10; // Get last digit
         num /= 10;                // Remove last digit
         index--;
         count++;
