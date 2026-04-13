@@ -11,6 +11,7 @@
 #include <zephyr/logging/log.h>
 
 #include <zmk/behavior.h>
+#include <zmk/battery.h>
 
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
@@ -19,9 +20,8 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding,
                                      struct zmk_behavior_binding_event event) {
 
-    LOG_DBG("=====BATTER_STATUS======= PRESSED %d keycode 0x%02X", event.position, binding->param1);
-
-
+    uint8_t res =  zmk_battery_state_of_charge();
+    LOG_DBG("=====BATTER_STATUS======= PRESSED %d keycode 0x%02X == BATTERY %d", event.position, binding->param1, res);
     return ZMK_BEHAVIOR_TRANSPARENT;
 }
 
