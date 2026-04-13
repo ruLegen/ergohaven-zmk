@@ -51,34 +51,37 @@ int zmk_behavior_invoke_binding(const struct zmk_behavior_binding *src_binding,
 
 */
 
-                         //   0     1     2     3      4    5     6     7     8     9                            
+//   0     1     2     3      4    5     6     7     8     9
 const uint32_t HID_KEYS[] = {0x27, 0x1E, 0x1F, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26};
 
+int split_reverse_digits(uint32_t num, int *digits, int max_digits)
+{
+    if (digits == NULL || max_digits <= 0)
+        return 0;
 
-int split_reverse_digits(uint32_t num, int* digits, int max_digits) {
-    if (digits == NULL || max_digits <= 0) return 0;
-    
     // Handle zero separately
-    if (num == 0) {
-        if (max_digits >= 1) {
+    if (num == 0)
+    {
+        if (max_digits >= 1)
+        {
             digits[0] = 0;
             return 1;
         }
         return 0;
     }
-    
-    int index = max_digits-1;
+
+    int index = max_digits - 1;
     int count = 0;
-    while (num > 0 && index >= 0) {
-        digits[count] = num % 10;  // Get last digit
-        num /= 10;                  // Remove last digit
+    while (num > 0 && index >= 0)
+    {
+        digits[count] = num % 10; // Get last digit
+        num /= 10;                // Remove last digit
         index--;
         count++;
     }
-    
+
     return count;
 }
-
 
 static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding,
                                      struct zmk_behavior_binding_event event)
@@ -101,29 +104,31 @@ static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding,
 #endif
         };
 
-        // should be more than max digits in MAX(uint8_t). 
-        // 3 should be enough for uint8_t 
+        // should be more than max digits in MAX(uint8_t).
+        // 3 should be enough for uint8_t
         const int max_number_of_digits = 3;
         int digits_tmp[max_number_of_digits];
-        int digits_count = split_reverse_digits(battery_level, &digits_tmp,max_number_of_digits);
-        if(digits_count <= 0){
+        int digits_count = split_reverse_digits(battery_level, &digits_tmp, max_number_of_digits);
+        if (digits_count <= 0)
+        {
             LOG_DBG("======== DIGITS_COUNT =%d", digits_count);
-        }else{
-            
+        }
+        else
+        {
             int start_index = max_number_of_digits - digits_count;
             for (size_t i = start_index; i < max_number_of_digits; i++)
             {
                 int digit = digits_tmp[i];
                 uint32_t hid_usage = ZMK_HID_USAGE(HID_USAGE_KEY, HID_KEYS[digit]);
                 LOG_DBG("======== DIGIT=%d | HID_USAGE = %d", digit, hid_usage);
+                // print digit
+                struct zmk_behavior_binding kp_binding = {
+                    .behavior_dev = "key_press",
+                    .param1 = hid_usage,
+                };
+                zmk_behavior_invoke_binding(&kp_binding, kp_binding_event, true);
+                zmk_behavior_invoke_binding(&kp_binding, kp_binding_event, false);
             }
-            // print digit
-            struct zmk_behavior_binding kp_binding = {
-                .behavior_dev = "key_press",
-                .param1 = hid_usage,
-            };
-            zmk_behavior_invoke_binding(&kp_binding, kp_binding_event, true);
-            zmk_behavior_invoke_binding(&kp_binding, kp_binding_event, false);
         }
     }
     else
