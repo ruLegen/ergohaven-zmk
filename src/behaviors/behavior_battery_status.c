@@ -104,7 +104,7 @@ static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding,
         // should be more than max digits in MAX(uint8_t). 
         // 3 should be enough for uint8_t 
         const int max_number_of_digits = 3;
-        int digits_tmp[max_number_of_digits] = {0};     
+        int digits_tmp[max_number_of_digits];
         int digits_count = split_reverse_digits(battery_level, &digits_tmp,max_number_of_digits);
         if(digits_count <= 0){
             LOG_DBG("======== DIGITS_COUNT =%d", digits_count);
