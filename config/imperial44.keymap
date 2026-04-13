@@ -9,6 +9,7 @@
         tap_kp_battery_status: tap_kp_battery_status {
             compatible = "zmk,behavior-battery-status";
             label = "TAP_KP_BATTERY_STATUS";
+            #binding-cells = <0>;
         };
     };
     keymap {
