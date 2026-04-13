@@ -16,7 +16,39 @@
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
 #if DT_HAS_COMPAT_STATUS_OKAY(DT_DRV_COMPAT)
+/*
+struct zmk_behavior_binding {
+#if IS_ENABLED(CONFIG_ZMK_BEHAVIOR_LOCAL_IDS_IN_BINDINGS)
+    zmk_behavior_local_id_t local_id;
+#endif // IS_ENABLED(CONFIG_ZMK_BEHAVIOR_LOCAL_IDS_IN_BINDINGS)
+    const char *behavior_dev;
+    uint32_t param1;
+    uint32_t param2;
+};
 
+struct zmk_behavior_binding_event {
+    int layer;
+    uint32_t position;
+    int64_t timestamp;
+#if IS_ENABLED(CONFIG_ZMK_SPLIT)
+    uint8_t source;
+#endif
+};
+
+
+ * @brief Invoke a behavior given its binding and invoking event details.
+ *
+ * @param src_binding Behavior binding to invoke.
+ * @param event The binding event struct containing details of the event that invoked it.
+ * @param pressed Whether the binding is pressed or released.
+ *
+ * @retval 0 If successful.
+ * @retval Negative errno code if failure.
+ 
+int zmk_behavior_invoke_binding(const struct zmk_behavior_binding *src_binding,
+                                struct zmk_behavior_binding_event event, bool pressed);
+
+*/
 static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding,
                                      struct zmk_behavior_binding_event event) {
 
@@ -31,8 +63,24 @@ static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding,
     }else
     {
         LOG_DBG("===== KP FOUND %s", kp->name);
-    }    
-    return ZMK_BEHAVIOR_TRANSPARENT;
+    }
+
+    struct zmk_behavior_binding kp_binding = {
+        .behavior_dev = "key_press",
+        .param1 = 0x7001E,
+    };    
+    struct zmk_behavior_binding_event kp_binding_event = {
+        .position = ZMK_VIRTUAL_KEY_POSITION_COMBO(combo_idx),
+        .timestamp = event.timestamp,
+#if IS_ENABLED(CONFIG_ZMK_SPLIT)
+        .source = event.source
+#endif
+    };
+    //0x7001E
+    zmk_behavior_invoke_binding(&kp_binding, kp_binding_event, true);
+    zmk_behavior_invoke_binding(&kp_binding, kp_binding_event, false);
+
+    return ZMK_BEHAVIOR_OPAQUE;
 }
 
 static int on_keymap_binding_released(struct zmk_behavior_binding *binding,
