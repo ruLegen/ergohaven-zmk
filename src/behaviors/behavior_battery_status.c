@@ -70,7 +70,7 @@ static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding,
         .param1 = 0x7001E,
     };    
     struct zmk_behavior_binding_event kp_binding_event = {
-        .position = ZMK_VIRTUAL_KEY_POSITION_COMBO(combo_idx),
+        .position = event.position,
         .timestamp = event.timestamp,
 #if IS_ENABLED(CONFIG_ZMK_SPLIT)
         .source = event.source
