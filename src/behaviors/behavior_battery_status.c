@@ -22,13 +22,13 @@ static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding,
     LOG_DBG("=====BATTER_STATUS======= PRESSED %d keycode 0x%02X", event.position, binding->param1);
 
 
-    return raise_zmk_keycode_state_changed_from_encoded(binding->param1, true, event.timestamp);
+    return ZMK_BEHAVIOR_TRANSPARENT;
 }
 
 static int on_keymap_binding_released(struct zmk_behavior_binding *binding,
                                       struct zmk_behavior_binding_event event) {
     LOG_DBG("=====BATTER_STATUS======= RELEASED %d keycode 0x%02X", event.position, binding->param1);
-    return raise_zmk_keycode_state_changed_from_encoded(binding->param1, false, event.timestamp);
+    return ZMK_BEHAVIOR_TRANSPARENT;
 }
 
 static const struct behavior_driver_api behavior_battery_status_driver_api = {
