@@ -25,7 +25,7 @@ static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding,
     LOG_DBG("=== %d keycode 0x%02X",event.position, binding->param1);
     LOG_DBG("=== BATTERY: %d",res);
     LOG_DBG("=== BEHAVIOUR_DEV: %s",binding->behavior_dev);
-    const struct device *kp = zmk_behavior_get_binding("kp");
+    const struct device *kp = zmk_behavior_get_binding("key_press");
     if (!kp) {
         LOG_DBG("No behavior kp");
     }else
