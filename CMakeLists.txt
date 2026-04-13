@@ -1,0 +1,1 @@
+target_sources_ifdef(CONFIG_ZMK_BEHAVIOR_BATTERY_STATUS app PRIVATE src/behaviors/behavior_battery_status.c)

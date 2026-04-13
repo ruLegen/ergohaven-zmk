@@ -1,0 +1,8 @@
+# Copyright (c) 2024 The ZMK Contributors
+# SPDX-License-Identifier: MIT
+
+description: Get the battery level
+
+compatible: "zmk,behavior-battery-status"
+
+include: zero_param.yaml
