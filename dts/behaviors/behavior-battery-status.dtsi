@@ -1,0 +1,22 @@
+/*
+ * Copyright (c) 2020 The ZMK Contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+
+#include <dt-bindings/zmk/behaviors.h>
+#include <dt-bindings/zmk/keys.h>
+
+/ {
+    behaviors {
+#if ZMK_BEHAVIOR_OMIT(GRESC)
+        /omit-if-no-ref/
+#endif
+        bsts: bsts {
+            compatible = "zmk,behavior-battery-status";
+            #binding-cells = <0>;
+            display-name = "Battery status";
+        };
+    };
+};
